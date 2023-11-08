@@ -24,23 +24,22 @@
 
 // export default App;
 
-import React from "react";
-import Body from "./Components/Body";
-import LoginSignup from "./Components/LoginSignup";
-import {BrowserRouter,Routes,Route} from 'react-router-dom';
-function App(){
-  return(
+import React from "react"
+import { BrowserRouter, Route, Routes } from "react-router-dom"
+import Body from "./Components/Body"
+import LoginSignup from "./Components/LoginSignup"
+function App() {
+  return (
     <>
       {/* <LoginSignup/> */}
       <BrowserRouter>
-      <Routes> 
-        <Route element={<LoginSignup/>} path="/loginSignup" />
-        <Route element={<Body/>} path="/body" />
-      </Routes>
-    </BrowserRouter>
-      
+        <Routes>
+          <Route element={<LoginSignup />} path="/login" />
+          <Route element={<Body />} path="/" />
+        </Routes>
+      </BrowserRouter>
     </>
   )
 }
 
-export default App;
+export default App
