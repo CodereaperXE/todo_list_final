@@ -63,5 +63,21 @@ let updateTask = async function (req, res) {
   }
 }
 
+const getAllTasks = async (req, res) => {
+  try {
+    const tasks = []
+    // Get tasks from the user
+    const user = await UserData.findById("654bb6d4b6f173728904861c")
+    user.Tasks.forEach(async (task) => {
+      tasks.push(await Task.findById(task))
+    })
+    console.log(tasks)
+    await res.status(200).send({ status: true, tasks: tasks })
+  } catch (error) {
+    console.error(error)
+    res.status(500).send({ status: false, msg: "Internal Server Error" })
+  }
+}
+
 //exporting modules
-module.exports = { createTask, updateTask }
+module.exports = { createTask, updateTask, getAllTasks }

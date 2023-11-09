@@ -14,6 +14,7 @@ router.patch("/task", taskController.createTask)
 
 //task update
 router.patch("/updateTask", taskController.updateTask)
+router.get("/alltask", taskController.getAllTasks)
 
 //exporting modules
 module.exports = router

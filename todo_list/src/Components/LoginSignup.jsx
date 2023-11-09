@@ -1,4 +1,5 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
+import Cookies from "universal-cookie"
 import "./LoginSignup.css"
 // import { BrowserRouter as Router, Route, Routes,Link } from 'react-router-dom';import Body from './Body';
 import axios from "axios" //connects frontend to backend by sending requests
@@ -7,7 +8,8 @@ import "react-toastify/dist/ReactToastify.css"
 
 const LoginSignup = () => {
   //global login
-  const path = "http://localhost:5000"
+  const cookies = new Cookies()
+  const path = "http://localhost:5000/api/v1/user"
   //defining login and signup variables
   const [name, setName] = useState("") //for sign values
   const [email, setEmail] = useState("") //for login and signup values
@@ -30,20 +32,21 @@ const LoginSignup = () => {
       console.log("handlesignup called")
       //waiting for response after post request
       const response = await axios.post(
-        path + "/signup",
+        path + "/register",
         {
-          Name: name,
-          Email: email,
-          Password: password,
+          name: name,
+          email: email,
+          password: password,
         },
         { headers: { "Content-Type": "application/json" } }
       )
 
       toast("hello") //doesnt work at the moment
 
-      console.log(response.data.msg) //temp
+      console.log(response.data.message)
+      //temp
       //alert user
-      alert(response.data.msg)
+      alert(response.data.message)
       // if(response.data.msg=="Already signed in") { //if user already signed in
       //   alert("Already signed in");
       // }
@@ -65,13 +68,14 @@ const LoginSignup = () => {
       const response = await axios.post(
         path + "/login",
         {
-          Email: email,
-          Password: password,
+          email: email,
+          password: password,
         },
         { headers: { "Content-Type": "application/json" } }
       )
       //alert user about login
-      alert(response.data.msg)
+      alert(response.data.message)
+      cookies.set("access_token", response.data.token)
 
       if (!response) {
         console.log("no response for login")

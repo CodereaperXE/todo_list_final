@@ -1,6 +1,6 @@
 import axios from "axios"
 import "bootstrap/dist/css/bootstrap.min.css"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import "./Body.css"
 import {
   addNewDivToOngoingTask,
@@ -12,15 +12,37 @@ import {
 
 function Body() {
   const [taskTitle, setTaskTitle] = useState("")
+  const [tasks, setTasks] = useState("")
   const handleNewTask = async () => {
     try {
-      await axios.patch("http://localhost:5000/task", {
-        TaskName: taskTitle,
-      })
+      await axios.post(
+        "http://localhost:5000/api/v1/todo",
+        {
+          title: taskTitle,
+        },
+        {
+          withCredentials: true,
+        }
+      )
     } catch (error) {
       console.log(error)
     }
   }
+
+  useEffect(() => {
+    const getTasks = async () => {
+      try {
+        const res = await axios.get("http://localhost:5000/api/v1/todo", {
+          withCredentials: true,
+        })
+        setTasks(res.data)
+        console.log(res.data)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    getTasks()
+  }, [])
   return (
     <>
       {/* <img src="https://armory.visualsoldiers.com/wp-content/uploads/2021/09/parallax-scroll-animations.jpg" alt="" /> */}
@@ -51,6 +73,12 @@ function Body() {
             <div id="ongoing_task" className="container-fluid">
               <center>
                 <h4 className="title_font">Ongoing Task</h4>
+                {tasks &&
+                  tasks.todos?.map((task) => (
+                    <p className="title_font" key={task._id}>
+                      {task.title}
+                    </p>
+                  ))}
               </center>
             </div>
             <div id="done_task" className="container-fluid">
