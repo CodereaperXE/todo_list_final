@@ -3,12 +3,14 @@ import Cookies from "universal-cookie"
 import "./LoginSignup.css"
 // import { BrowserRouter as Router, Route, Routes,Link } from 'react-router-dom';import Body from './Body';
 import axios from "axios" //connects frontend to backend by sending requests
+import { useNavigate } from "react-router-dom"
 import { toast, ToastContainer } from "react-toastify" //used to give popup
 import "react-toastify/dist/ReactToastify.css"
 
 const LoginSignup = () => {
   //global login
   const cookies = new Cookies()
+  const navigate = useNavigate()
   const path = "http://localhost:5000/api/v1/user"
   //defining login and signup variables
   const [name, setName] = useState("") //for sign values
@@ -81,6 +83,7 @@ const LoginSignup = () => {
         console.log("no response for login")
       } else {
         console.log("login response")
+        navigate("/")
       }
     } catch (error) {
       console.log(error, "error")

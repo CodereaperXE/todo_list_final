@@ -1,6 +1,8 @@
 import axios from "axios"
 import "bootstrap/dist/css/bootstrap.min.css"
 import React, { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
+import Cookies from "universal-cookie"
 import "./Body.css"
 import {
   addNewDivToOngoingTask,
@@ -13,6 +15,10 @@ import {
 function Body() {
   const [taskTitle, setTaskTitle] = useState("")
   const [tasks, setTasks] = useState("")
+  const [trigger, setTrigger] = useState(false)
+  const cookies = new Cookies()
+  const navigate = useNavigate()
+
   const handleNewTask = async () => {
     try {
       await axios.post(
@@ -24,12 +30,17 @@ function Body() {
           withCredentials: true,
         }
       )
+      setTrigger(!trigger)
     } catch (error) {
       console.log(error)
     }
   }
 
   useEffect(() => {
+    const token = cookies.get("access_token")
+    if (!token) {
+      navigate("/login") //redirect to login page if not logged in
+    }
     const getTasks = async () => {
       try {
         const res = await axios.get("http://localhost:5000/api/v1/todo", {
@@ -42,7 +53,7 @@ function Body() {
       }
     }
     getTasks()
-  }, [])
+  }, [trigger])
   return (
     <>
       {/* <img src="https://armory.visualsoldiers.com/wp-content/uploads/2021/09/parallax-scroll-animations.jpg" alt="" /> */}
